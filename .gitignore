@@ -8,8 +8,18 @@
 !.zshenv
 
 !.config/
-!.config/**
-!.config/*/**
+!.config/nvim/
+!.config/nvim/*
+!.config/nvim/*/**
+
+!.config/yazi/
+!.config/yazi/*
+!.config/yazi/*/**
+
+!.config/blink/
+!.config/blink/*
+!.config/blink/*/**
+
 
 !.tmux.conf
 !.tmux/
