@@ -1,0 +1,72 @@
+# Custom keybindings (extends defaults)
+
+[mgr]
+prepend_keymap = [
+  # Shell
+  { on = "$", run = "shell zsh --block --confirm", desc = "Open shell here" },
+  { on = "!", run = "shell zsh --block", desc = "Open shell (quiet)" },
+
+  # Quick actions
+  { on = "<C-n>", run = "create", desc = "Create file/dir" },
+  { on = "T", run = "plugin toggle-pane --args=max-preview", desc = "Toggle max preview" },
+
+  # Zoxide jump (z + j = "zump")
+  { on = ["z", "j"], run = "shell 'zoxide query -i | xargs -I {} yazi {}' --block", desc = "Zoxide jump" },
+
+  # fzf search (z + f = "zfind")
+  { on = ["z", "f"], run = "shell 'fd -tf | fzf | xargs -I {} yazi \"$(dirname {})\"' --block", desc = "fzf files" },
+
+  # Git
+  { on = ["g", "g"], run = "shell lazygit --block", desc = "Open lazygit" },
+  { on = ["g", "s"], run = "shell 'git status' --block --confirm", desc = "Git status" },
+  { on = ["g", "l"], run = "shell 'git log --oneline -20' --block --confirm", desc = "Git log" },
+
+  # Goto shortcuts
+  { on = ["g", "h"], run = "cd ~", desc = "Goto home" },
+  { on = ["g", "c"], run = "cd ~/.config", desc = "Goto config" },
+  { on = ["g", "d"], run = "cd ~/Downloads", desc = "Goto downloads" },
+  { on = ["g", "p"], run = "cd ~/Projects", desc = "Goto projects" },
+  { on = ["g", "t"], run = "cd /tmp", desc = "Goto tmp" },
+
+  # Smart enter (open files, enter dirs)
+  { on = "l", run = "plugin smart-enter", desc = "Smart enter" },
+  { on = "<Enter>", run = "plugin smart-enter", desc = "Smart enter" },
+
+  # Jump to char
+  { on = ";", run = "plugin jump-to-char", desc = "Jump to char" },
+
+  # Relative motions (vim-style 5j, 10k, etc.)
+  { on = "1", run = "plugin relative-motions --args=1", desc = "Relative motion 1" },
+  { on = "2", run = "plugin relative-motions --args=2", desc = "Relative motion 2" },
+  { on = "3", run = "plugin relative-motions --args=3", desc = "Relative motion 3" },
+  { on = "4", run = "plugin relative-motions --args=4", desc = "Relative motion 4" },
+  { on = "5", run = "plugin relative-motions --args=5", desc = "Relative motion 5" },
+  { on = "6", run = "plugin relative-motions --args=6", desc = "Relative motion 6" },
+  { on = "7", run = "plugin relative-motions --args=7", desc = "Relative motion 7" },
+  { on = "8", run = "plugin relative-motions --args=8", desc = "Relative motion 8" },
+  { on = "9", run = "plugin relative-motions --args=9", desc = "Relative motion 9" },
+
+  # Archive operations
+  { on = ["c", "x"], run = "shell 'tar -xzvf $0' --block --confirm", desc = "Extract tar.gz" },
+
+  # Open in finder
+  { on = "O", run = "shell 'open -R $0' --confirm", desc = "Reveal in Finder" },
+
+  # Quick preview with bat
+  { on = "P", run = "shell 'bat --paging=always $0' --block", desc = "Preview with bat" },
+]
+
+[pick]
+prepend_keymap = [
+  { on = "<Esc>", run = "close", desc = "Cancel" },
+]
+
+[input]
+prepend_keymap = [
+  { on = "<Esc>", run = "close", desc = "Cancel" },
+]
+
+[confirm]
+prepend_keymap = [
+  { on = "<Esc>", run = "close", desc = "Cancel" },
+]

@@ -8,15 +8,18 @@ source $ZSH/oh-my-zsh.sh
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+[[ -f ~/.config/lsd/colors.zsh ]] && source ~/.config/lsd/colors.zsh
+
 export FZF_DEFAULT_OPTS="--height 100% --layout=reverse --border --preview 'bat --color=always --style=numbers --line-range :500 {}'"
 
 alias gl="git log --oneline --decorate --graph --all"
 alias gs="git status"
 alias l='y'
-alias ll='ls -lah'
+alias ll='lsd -lah'
 alias python='python3'
 alias gem='gemini'
 alias vim='nvim'
+alias pp='pbcopy'
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -58,5 +61,6 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-# pnpm end
-export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
+
+# zoxide (smarter cd)
+eval "$(zoxide init zsh)"

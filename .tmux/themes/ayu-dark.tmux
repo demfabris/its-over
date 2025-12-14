@@ -1,45 +1,50 @@
-### Ayu Dark theme for tmux
+### Ayu Dark theme for tmux (mini.statusline style)
 # Palette
-# bg        : #0A0E14
-# fg        : #B3B1AD
-# muted     : #5C6773
-# selection : #273747
+# bg        : #0d1017
+# fg        : #BFBDB6
+# muted     : #636A72
+# selection : #1a1f29
 # orange    : #E6B450
 # cyan      : #95E6CB
-# blue      : #5CCFE6
-# purple    : #D4BFFF
+# blue      : #59C2FF
+# purple    : #D2A6FF
+# green     : #AAD94C
 # red       : #F07178
 
-# Status bar
-set -g status-style 'bg=default,fg=#B3B1AD'
+# Status bar - balanced minimal
+set -g status-style 'bg=#0d1017,fg=#BFBDB6'
+set -g status-interval 5
 set -g status-justify centre
 set -g status-left-length 32
-set -g status-right-length 90
+set -g status-right-length 48
 
-# Left: session name (accent) + pane index (muted)
-set -g status-left '#[bg=#E6B450,fg=#0A0E14,bold] #S #[bg=default,fg=#5C6773] | #I:#P '
+# Left: session name (lights up on prefix) + zoom indicator
+# - Normal: orange accent
+# - Prefix active: cyan highlight
+# - Zoomed: shows 󰁌 icon
+set -g status-left '#{?client_prefix,#[bg=#59C2FF],#[bg=#E6B450]}#[fg=#0d1017,bold] #S #{?window_zoomed_flag,󰁌 ,}#[bg=default,fg=#636A72] '
 
-# Right: date (muted) • time (fg) • user (accent)
-set -g status-right '#[fg=#5C6773]%Y-%m-%d #[fg=#5C6773]• #[fg=#B3B1AD]%H:%M #[fg=#5C6773]• #[fg=#E6B450,bold]#(whoami)'
+# Right: git branch + time + pane
+set -g status-right '#[fg=#D2A6FF]#{?#{!=:#(git -C "#{pane_current_path}" branch --show-current 2>/dev/null),}, #(git -C "#{pane_current_path}" branch --show-current 2>/dev/null),} #[fg=#636A72]%H:%M #[fg=#E6B450]󰇙 #[fg=#636A72]#I:#P '
 
-# Windows
-set -g window-status-style 'bg=default,fg=#5C6773'
+# Windows - inactive muted, active accented
+set -g window-status-style 'bg=default,fg=#636A72'
 set -g window-status-activity-style 'bg=default,fg=#95E6CB'
 
-# Window formats: emphasise current with accent
-set -g window-status-format ' #[fg=#5C6773]#I:#W#{?window_flags, #[fg=#F07178]#F,} '
-set -g window-status-current-format '#[bg=#E6B450,fg=#0A0E14,bold] #I:#W #{?window_flags,#F,} '
+# Window formats: icons + name, current highlighted
+set -g window-status-format '  #W  '
+set -g window-status-current-format '#[bg=#1a1f29,fg=#E6B450,bold]  #W  '
 
 # Panes and messages
-set -g pane-border-style 'fg=#273747'
+set -g pane-border-style 'fg=#1a1f29'
 set -g pane-active-border-style 'fg=#E6B450'
-set -g message-style 'bg=#E6B450,fg=#0A0E14,bold'
-set -g message-command-style 'bg=#E6B450,fg=#0A0E14,bold'
-set -g mode-style 'bg=#273747,fg=#B3B1AD'
+set -g message-style 'bg=#E6B450,fg=#0d1017,bold'
+set -g message-command-style 'bg=#E6B450,fg=#0d1017,bold'
+set -g mode-style 'bg=#1a1f29,fg=#BFBDB6'
 
 # Search highlighting (/ in copy-mode)
-set -g copy-mode-match-style 'bg=#273747,fg=#B3B1AD'
-set -g copy-mode-current-match-style 'bg=#E6B450,fg=#0A0E14,bold'
+set -g copy-mode-match-style 'bg=#1a1f29,fg=#BFBDB6'
+set -g copy-mode-current-match-style 'bg=#E6B450,fg=#0d1017,bold'
 
 # Clock (prefix + t)
 set -g clock-mode-colour '#E6B450'
