@@ -43,23 +43,14 @@
       "Bash(find:*)",
       "Bash(cat:*)",
       "Bash(du:*)",
+      "Bash(gemini:*)",
+      "Bash(codex:*)",
+      "Bash(claude:*)",
       "WebSearch"
     ],
     "deny": [],
     "ask": [],
     "defaultMode": "acceptEdits"
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "/bin/zsh /Users/demfabris/.claude/statusline.sh"
-  },
-  "enabledPlugins": {
-    "claude-mem@thedotmack": true,
-    "dev-browser@dev-browser-marketplace": true,
-    "learning-output-style@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true,
-    "context7@claude-plugins-official": true,
-    "example-skills@anthropic-agent-skills": true
   },
   "hooks": {
     "UserPromptSubmit": [
@@ -94,6 +85,39 @@
           }
         ]
       }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/scripts/cc-notify-hook.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/scripts/cc-notify-hook.sh"
+          }
+        ]
+      }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "/bin/bash ~/.claude/scripts/statusline.sh"
+  },
+  "enabledPlugins": {
+    "claude-mem@thedotmack": true,
+    "dev-browser@dev-browser-marketplace": true,
+    "learning-output-style@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "example-skills@anthropic-agent-skills": true,
+    "supabase@claude-plugins-official": true
   }
 }

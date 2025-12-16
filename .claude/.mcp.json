@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "android-mcp": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/Users/demfabris/Documents/Development/claudx/Android-MCP",
+        "run",
+        "android-mcp",
+        "--emulator"
+      ]
+    }
+  }
+}

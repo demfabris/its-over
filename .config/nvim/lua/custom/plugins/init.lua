@@ -10,6 +10,44 @@ return {
     end,
   },
 
+  -- TypeScript/JavaScript powertools (like rustaceanvim for TS)
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    ft = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' },
+    opts = {
+      settings = {
+        -- spawn additional tsserver instance to calculate diagnostics on it
+        separate_diagnostic_server = true,
+        -- specify commands for code actions
+        tsserver_file_preferences = {
+          includeInlayParameterNameHints = 'all',
+          includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayVariableTypeHints = true,
+          includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayEnumMemberValueHints = true,
+        },
+      },
+      on_attach = function(_, bufnr)
+        local map = function(keys, func, desc)
+          vim.keymap.set('n', keys, func, { buffer = bufnr, desc = 'TS: ' .. desc })
+        end
+        -- TypeScript-specific keymaps (mirrors rustaceanvim pattern)
+        map('<leader>to', '<CMD>TSToolsOrganizeImports<CR>', '[O]rganize imports')
+        map('<leader>ts', '<CMD>TSToolsSortImports<CR>', '[S]ort imports')
+        map('<leader>tu', '<CMD>TSToolsRemoveUnusedImports<CR>', 'Remove [U]nused imports')
+        map('<leader>td', '<CMD>TSToolsGoToSourceDefinition<CR>', 'Go to source [D]efinition')
+        map('<leader>tr', '<CMD>TSToolsRenameFile<CR>', '[R]ename file (updates imports)')
+        map('<leader>tf', '<CMD>TSToolsFileReferences<CR>', '[F]ile references')
+        map('<leader>ta', '<CMD>TSToolsAddMissingImports<CR>', '[A]dd missing imports')
+        map('<leader>tx', '<CMD>TSToolsFixAll<CR>', 'Fi[x] all fixable errors')
+      end,
+    },
+  },
+
   -- Rust development powertools
   {
     'mrcjkb/rustaceanvim',
@@ -104,71 +142,6 @@ return {
       })
     end,
   },
-  -- Oil: edit filesystem like a buffer (with git status signs)
-  {
-    'stevearc/oil.nvim',
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-      'refractalize/oil-git-status.nvim',
-    },
-    lazy = false,
-    keys = {
-      { '-', '<CMD>Oil<CR>', desc = 'Open parent directory' },
-      { '<leader>e', function()
-        local oil = require('oil')
-        -- Find existing oil sidebar buffer
-        for _, win in ipairs(vim.api.nvim_list_wins()) do
-          local buf = vim.api.nvim_win_get_buf(win)
-          if vim.bo[buf].filetype == 'oil' then
-            vim.api.nvim_win_close(win, true)
-            return
-          end
-        end
-        -- Open new sidebar
-        vim.cmd('topleft 35vsplit')
-        oil.open()
-      end, desc = 'Toggle file explorer sidebar' },
-    },
-    config = function()
-      require('oil').setup({
-        default_file_explorer = true,
-        delete_to_trash = true,
-        skip_confirm_for_simple_edits = true,
-        view_options = {
-          show_hidden = true,
-          natural_order = true,
-        },
-        win_options = {
-          signcolumn = 'yes:2',
-        },
-        float = {
-          padding = 2,
-          max_width = 90,
-          max_height = 30,
-          border = 'rounded',
-        },
-        keymaps = {
-          ['g?'] = 'actions.show_help',
-          ['<CR>'] = 'actions.select',
-          ['<C-v>'] = 'actions.select_vsplit',
-          ['<C-s>'] = 'actions.select_split',
-          ['<C-t>'] = 'actions.select_tab',
-          ['<C-p>'] = 'actions.preview',
-          ['q'] = 'actions.close',
-          ['-'] = 'actions.parent',
-          ['_'] = 'actions.open_cwd',
-          ['`'] = 'actions.cd',
-          ['gs'] = 'actions.change_sort',
-          ['gx'] = 'actions.open_external',
-          ['g.'] = 'actions.toggle_hidden',
-        },
-        use_default_keymaps = false,
-      })
-      -- Setup git status AFTER oil is configured
-      require('oil-git-status').setup()
-    end,
-  },
-
   -- Toggle terminal
   {
     'akinsho/toggleterm.nvim',
@@ -193,6 +166,40 @@ return {
         height = function() return math.floor(vim.o.lines * 0.8) end,
       },
       shade_terminals = false,
+    },
+  },
+
+  -- Bufferline: VSCode-style tabs
+  {
+    'akinsho/bufferline.nvim',
+    version = '*',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    event = 'VeryLazy',
+    keys = {
+      { 'gd', '<CMD>BufferLineCycleNext<CR>', desc = 'Next buffer' },
+      { 'gD', '<CMD>BufferLineCyclePrev<CR>', desc = 'Previous buffer' },
+      { '<leader>bc', '<CMD>BufferLinePickClose<CR>', desc = 'Pick buffer to close' },
+      { '<leader>bp', '<CMD>BufferLinePick<CR>', desc = 'Pick buffer' },
+      { '<leader>bo', '<CMD>BufferLineCloseOthers<CR>', desc = 'Close other buffers' },
+    },
+    opts = {
+      options = {
+        mode = 'buffers',
+        diagnostics = 'nvim_lsp',
+        diagnostics_indicator = function(_, _, diag)
+          local icons = { error = ' ', warning = ' ', hint = ' ', info = ' ' }
+          local ret = (diag.error and icons.error .. diag.error .. ' ' or '')
+            .. (diag.warning and icons.warning .. diag.warning or '')
+          return vim.trim(ret)
+        end,
+        offsets = {
+          { filetype = 'neo-tree', text = 'Explorer', text_align = 'center', highlight = 'Directory' },
+        },
+        show_buffer_close_icons = true,
+        show_close_icon = false,
+        separator_style = 'thin',
+        always_show_bufferline = false, -- Only show when 2+ buffers
+      },
     },
   },
 

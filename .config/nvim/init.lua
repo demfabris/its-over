@@ -20,6 +20,11 @@ end)
 
 vim.o.breakindent = false
 
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.softtabstop = 4
+vim.o.expandtab = true
+
 -- Undo history
 vim.o.undofile = true
 
@@ -232,10 +237,14 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
+        { '<leader>b', group = '[B]uffer' },
         { '<leader>c', group = '[C]laude/[C]rates' },
+        { '<leader>e', desc = 'File [E]xplorer' },
+        { '<leader>E', desc = '[E]xplorer reveal' },
+        { '<leader>g', group = '[G]it' },
         { '<leader>r', group = '[R]ust' },
         { '<leader>s', group = '[S]earch' },
-        { '<leader>t', group = '[T]oggle' },
+        { '<leader>t', group = '[T]ypeScript/[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
@@ -352,7 +361,7 @@ require('lazy').setup({
 
           -- Hover documentation with styled border
           map('K', function()
-            vim.lsp.buf.hover({ border = 'rounded', max_width = 80, max_height = 25 })
+            vim.lsp.buf.hover { border = 'rounded', max_width = 80, max_height = 25 }
           end, 'Hover Documentation')
 
           -- Rename the variable under your cursor.
@@ -485,11 +494,8 @@ require('lazy').setup({
         -- rust_analyzer = {}, -- Handled by rustaceanvim
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`ts_ls`) will work just fine
-        ts_ls = {},
+        -- TypeScript is handled by typescript-tools.nvim (see custom/plugins/init.lua)
+        -- Similar to how rustaceanvim handles Rust - direct tsserver integration FTW
         --
 
         lua_ls = {
@@ -522,6 +528,7 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, server_names)
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'prettierd', -- Prettier daemon - faster than prettier
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -575,11 +582,18 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        -- TypeScript/JavaScript - prettierd is a daemon, way faster
+        typescript = { 'prettierd' },
+        typescriptreact = { 'prettierd' },
+        javascript = { 'prettierd' },
+        javascriptreact = { 'prettierd' },
+        json = { 'prettierd' },
+        jsonc = { 'prettierd' },
+        html = { 'prettierd' },
+        css = { 'prettierd' },
+        scss = { 'prettierd' },
+        markdown = { 'prettierd' },
+        yaml = { 'prettierd' },
       },
     },
   },
@@ -702,7 +716,7 @@ require('lazy').setup({
     config = function()
       local ok, ayu = pcall(require, 'ayu')
       if ok then
-        ayu.setup({
+        ayu.setup {
           mirage = false, -- set true for ayu-mirage
           overrides = {
             -- Match Ghostty background exactly
@@ -711,10 +725,10 @@ require('lazy').setup({
             SignColumn = { bg = '#0d1017' },
             LineNr = { bg = '#0d1017' },
             NormalFloat = { bg = '#0d1017' },
-            FloatBorder = { fg = '#3D424D', bg = '#0d1017' },  -- Subtle border, visible but not distracting
-            FloatTitle = { fg = '#E6B450', bg = '#0d1017', bold = true },  -- Orange accent
+            FloatBorder = { fg = '#3D424D', bg = '#0d1017' }, -- Subtle border, visible but not distracting
+            FloatTitle = { fg = '#E6B450', bg = '#0d1017', bold = true }, -- Orange accent
           },
-        })
+        }
         vim.o.background = 'dark'
         ayu.colorscheme()
       else
@@ -766,7 +780,12 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs',
     -- [[ Configure Treesitter ]]
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'rust' },
+      ensure_installed = {
+          'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline',
+          'query', 'vim', 'vimdoc', 'rust',
+          -- TypeScript/JavaScript ecosystem
+          'typescript', 'tsx', 'javascript', 'jsdoc', 'json',
+        },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -785,7 +804,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',  -- Replaced by oil.nvim
+  require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   { import = 'custom.plugins' },
