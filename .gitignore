@@ -27,6 +27,17 @@
 !.claude/settings.json
 !.claude/commands/
 !.claude/commands/**
+!.claude/skills/
+!.claude/skills/**
+# Exclude compiled skill artifacts
+.claude/skills/dist/
+!.claude/hooks/
+!.claude/hooks/**
+!.claude/scripts/
+!.claude/scripts/**
+
+# MCP Server config (uses env vars for secrets)
+!.mcp.json
 
 # ─────────────────────────────────────────────
 # .config/ tools
