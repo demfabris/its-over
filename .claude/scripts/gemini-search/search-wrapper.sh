@@ -74,17 +74,15 @@ extract_content_from_url() {
         return 1
     fi
 
-    # Use Gemini CLI in headless mode to extract and summarize content from URL
-    # The --yolo flag auto-approves the google_web_search tool usage
+    # Use Gemini CLI to extract and summarize content from URL
+    # --yolo auto-approves tool usage
     log_message "DEBUG" "Using Gemini CLI to extract content from: $url"
 
-    local prompt="Extract and summarize the main content from this webpage: $url. Provide only the key information without additional commentary."
-
-    # Execute Gemini CLI in headless mode with --yolo for auto-approval
-    if content=$(gemini -p "/tool:googleSearch query:\"$prompt\" raw:true" --yolo --output-format json -m "gemini-2.5-flash" 2>/dev/null); then
+    # Execute Gemini CLI with positional prompt
+    if content=$(gemini "Extract and summarize the main content from this webpage: $url. Provide only the key information." --yolo --output-format json -m "gemini-2.5-flash" 2>/dev/null); then
         if [[ -n "$content" ]]; then
             echo "$content"
-            log_message "INFO" "Successfully extracted content from $url using Gemini grounded web server"
+            log_message "INFO" "Successfully extracted content from $url using Gemini"
             return 0
         fi
     fi
@@ -186,13 +184,12 @@ perform_search() {
     while [[ $attempt -le $MAX_RETRIES ]]; do
         log_message "INFO" "Attempt $attempt of $MAX_RETRIES for Gemini search: $query"
 
-        # Execute Gemini CLI in headless mode with grounded web search
-        # The --yolo flag auto-approves the google_web_search tool usage
-        # The settings.json file restricts the CLI to only use google_web_search
-        # Use explicit tool invocation format to force raw results
+        # Execute Gemini CLI with web search
+        # Uses positional prompt (not deprecated -p flag)
+        # --yolo auto-approves tool usage
+        # Simple prompt that reliably triggers google_web_search
         local result
-        local search_prompt="Execute google_web_search for query: \"$query\". Format output as: 'Web search results for \"$query\":\n\n[For each result: Title | URL | Snippet]\n\nDo NOT add any analysis, interpretation, clarification questions, or additional commentary. Just list the search results exactly as received from the tool."
-        if result=$(gemini -p "$search_prompt" --yolo --output-format json -m "gemini-2.5-flash" 2>/dev/null); then
+        if result=$(gemini "use google search to find: $query" --yolo --output-format json -m "gemini-2.5-flash" 2>/dev/null); then
             if [[ -n "$result" ]]; then
                 log_message "INFO" "Gemini search successful on attempt $attempt"
                 echo "$result"
