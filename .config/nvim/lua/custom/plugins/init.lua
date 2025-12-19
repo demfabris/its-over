@@ -176,8 +176,8 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     event = 'VeryLazy',
     keys = {
-      { 'gd', '<CMD>BufferLineCycleNext<CR>', desc = 'Next buffer' },
-      { 'gD', '<CMD>BufferLineCyclePrev<CR>', desc = 'Previous buffer' },
+      { 'gt', '<CMD>BufferLineCycleNext<CR>', desc = 'Next buffer' },
+      { 'gT', '<CMD>BufferLineCyclePrev<CR>', desc = 'Previous buffer' },
       { '<leader>bc', '<CMD>BufferLinePickClose<CR>', desc = 'Pick buffer to close' },
       { '<leader>bp', '<CMD>BufferLinePick<CR>', desc = 'Pick buffer' },
       { '<leader>bo', '<CMD>BufferLineCloseOthers<CR>', desc = 'Close other buffers' },

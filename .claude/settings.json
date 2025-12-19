@@ -53,55 +53,26 @@
     "defaultMode": "acceptEdits"
   },
   "hooks": {
-    "UserPromptSubmit": [
+    "PreToolUse": [
       {
-        "matcher": "",
+        "matcher": "WebSearch",
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/demfabris/.claude/scripts/user-prompt-submit.sh"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/scripts/cc-notify-stop.sh"
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.config/cc-notify/cc-notify send -t complete 'Context compacting...'"
+            "command": "python3 ~/.claude/hooks/gemini-search/websearch-intercept.py",
+            "timeout": 180
           }
         ]
       }
     ],
     "Notification": [
       {
-        "matcher": "permission_prompt",
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/scripts/cc-notify-hook.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "idle_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/scripts/cc-notify-hook.sh"
+            "command": "/bin/bash ~/.claude/hooks/notification-tts.sh",
+            "timeout": 30
           }
         ]
       }
@@ -113,11 +84,11 @@
   },
   "enabledPlugins": {
     "claude-mem@thedotmack": true,
-    "dev-browser@dev-browser-marketplace": true,
     "learning-output-style@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "example-skills@anthropic-agent-skills": true,
-    "supabase@claude-plugins-official": true
+    "supabase@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true
   }
 }
