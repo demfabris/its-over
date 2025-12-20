@@ -69,3 +69,5 @@ esac
 eval "$(zoxide init zsh)"
 
 export PATH="$PATH:$HOME/.local/bin"
+export TTS_DEBUG=1
+export CCNOTIFY_DEBUG=1
