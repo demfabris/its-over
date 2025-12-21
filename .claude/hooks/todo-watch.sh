@@ -4,6 +4,9 @@
 
 CC_NOTIFY_BIN="${HOME}/.config/cc-notify/cc-notify"
 
+# Session identification - use working directory basename as human-readable name
+SESSION_NAME=$(basename "$PWD")
+
 # Read input from stdin
 INPUT=$(cat)
 
@@ -38,5 +41,5 @@ if [ "$IN_PROGRESS" -gt 0 ]; then
     [ -n "$CURRENT" ] && MESSAGE="$MESSAGE - $CURRENT"
 fi
 
-# Send to cc-notify (fire and forget)
-"$CC_NOTIFY_BIN" send -t todo_update --payload "$PAYLOAD" "$MESSAGE" &>/dev/null &
+# Send to cc-notify with session flag (fire and forget)
+"$CC_NOTIFY_BIN" send -t todo_update -s "$SESSION_NAME" --payload "$PAYLOAD" "$MESSAGE" &>/dev/null &

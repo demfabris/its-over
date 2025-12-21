@@ -4,6 +4,9 @@
 
 CC_NOTIFY_BIN="${HOME}/.config/cc-notify/cc-notify"
 
+# Session identification - use working directory basename as human-readable name
+SESSION_NAME=$(basename "$PWD")
+
 # Read input from stdin
 INPUT=$(cat)
 
@@ -29,19 +32,21 @@ if [ -z "$FILE_PATH" ]; then
     exit 0
 fi
 
-# Build payload
+# Build payload with session info
 PAYLOAD=$(jq -n \
     --arg path "$FILE_PATH" \
     --arg op "$OPERATION" \
+    --arg session "$SESSION_NAME" \
     '{
         "type": "file_change",
         "file_path": $path,
-        "operation": $op
+        "operation": $op,
+        "session_name": $session
     }')
 
 # Human-readable message
 FILENAME=$(basename "$FILE_PATH")
 MESSAGE="$OPERATION: $FILENAME"
 
-# Send to cc-notify (fire and forget)
-"$CC_NOTIFY_BIN" send -t file_change --payload "$PAYLOAD" "$MESSAGE" &>/dev/null &
+# Send to cc-notify with session flag (fire and forget)
+"$CC_NOTIFY_BIN" send -t file_change -s "$SESSION_NAME" --payload "$PAYLOAD" "$MESSAGE" &>/dev/null &
