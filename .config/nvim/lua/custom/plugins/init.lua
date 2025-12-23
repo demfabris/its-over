@@ -240,11 +240,26 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     event = 'VeryLazy',
     keys = {
+      -- VSCode-style tab switching
+      { '<Tab>', '<CMD>BufferLineCycleNext<CR>', desc = 'Next buffer' },
+      { '<S-Tab>', '<CMD>BufferLineCyclePrev<CR>', desc = 'Previous buffer' },
+      -- Ctrl+Shift+Arrow for tab switching
+      { '<C-S-Right>', '<CMD>BufferLineCycleNext<CR>', desc = 'Next buffer' },
+      { '<C-S-Left>', '<CMD>BufferLineCyclePrev<CR>', desc = 'Previous buffer' },
+      -- Keep gt/gT for vim muscle memory
       { 'gt', '<CMD>BufferLineCycleNext<CR>', desc = 'Next buffer' },
       { 'gT', '<CMD>BufferLineCyclePrev<CR>', desc = 'Previous buffer' },
+      -- Buffer management
       { '<leader>bc', '<CMD>BufferLinePickClose<CR>', desc = 'Pick buffer to close' },
       { '<leader>bp', '<CMD>BufferLinePick<CR>', desc = 'Pick buffer' },
       { '<leader>bo', '<CMD>BufferLineCloseOthers<CR>', desc = 'Close other buffers' },
+      { '<leader>bx', '<CMD>bdelete<CR>', desc = 'Close current buffer' },
+      -- Jump to buffer by position (like Cmd+1, Cmd+2 in VSCode)
+      { '<leader>1', '<CMD>BufferLineGoToBuffer 1<CR>', desc = 'Go to buffer 1' },
+      { '<leader>2', '<CMD>BufferLineGoToBuffer 2<CR>', desc = 'Go to buffer 2' },
+      { '<leader>3', '<CMD>BufferLineGoToBuffer 3<CR>', desc = 'Go to buffer 3' },
+      { '<leader>4', '<CMD>BufferLineGoToBuffer 4<CR>', desc = 'Go to buffer 4' },
+      { '<leader>5', '<CMD>BufferLineGoToBuffer 5<CR>', desc = 'Go to buffer 5' },
     },
     opts = {
       options = {

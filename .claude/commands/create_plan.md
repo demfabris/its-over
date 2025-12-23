@@ -7,6 +7,13 @@ model: opus
 
 You are tasked with creating detailed implementation plans through an interactive, iterative process. You should be skeptical, thorough, and work collaboratively with the user to produce high-quality technical specifications.
 
+## Initial Setup
+
+**First, detect if this repo uses a thoughts/ directory:**
+- Check if `thoughts/` directory exists in the repo root
+- Set `HAS_THOUGHTS=true` if it exists, `HAS_THOUGHTS=false` otherwise
+- This determines whether to use thoughts-related agents and output paths
+
 ## Initial Response
 
 When this command is invoked:
@@ -27,8 +34,8 @@ Please provide:
 
 I'll analyze this information and work with you to create a comprehensive plan.
 
-Tip: You can also invoke this command with a ticket file directly: `/create_plan thoughts/shared/tickets/task_1234.md`
-For deeper analysis, try: `/create_plan think deeply about thoughts/shared/tickets/task_1234.md`
+Tip: You can also invoke this command with a ticket file directly: `/create_plan path/to/ticket.md`
+For deeper analysis, try: `/create_plan think deeply about path/to/ticket.md`
 ```
 
 Then wait for the user's input.
@@ -38,7 +45,7 @@ Then wait for the user's input.
 ### Step 1: Context Gathering & Initial Analysis
 
 1. **Read all mentioned files immediately and FULLY**:
-   - Ticket files (e.g., `thoughts/shared/tickets/task_1234.md`)
+   - Ticket files
    - Research documents
    - Related implementation plans
    - Any JSON/data files mentioned
@@ -51,7 +58,7 @@ Then wait for the user's input.
 
    - Use the **codebase-locator** agent to find all files related to the ticket/task
    - Use the **codebase-analyzer** agent to understand how the current implementation works
-   - If relevant, use the **thoughts-locator** agent to find any existing thoughts documents about this feature
+   - If HAS_THOUGHTS=true, use the **thoughts-locator** agent to find any existing thoughts documents about this feature
 
    These agents will:
    - Find relevant source files, configs, and tests
@@ -108,7 +115,7 @@ After getting initial clarifications:
    - **codebase-analyzer** - To understand implementation details (e.g., "analyze how [system] works")
    - **codebase-pattern-finder** - To find similar features we can model after
 
-   **For historical context:**
+   **For historical context (ONLY if HAS_THOUGHTS=true):**
    - **thoughts-locator** - To find any research, plans, or decisions about this area
    - **thoughts-analyzer** - To extract key insights from the most relevant documents
 
@@ -165,7 +172,9 @@ Once aligned on approach:
 
 After structure approval:
 
-1. **Write the plan** to `thoughts/shared/plans/YYYY-MM-DD-ENG-XXXX-description.md`
+1. **Write the plan** to the appropriate location:
+   - **If HAS_THOUGHTS=true**: `thoughts/shared/plans/YYYY-MM-DD-ENG-XXXX-description.md`
+   - **If HAS_THOUGHTS=false**: `/tmp/{repo_name}/plans/YYYY-MM-DD-description.md`
    - Format: `YYYY-MM-DD-ENG-XXXX-description.md` where:
      - YYYY-MM-DD is today's date
      - ENG-XXXX is the ticket number (omit if no ticket)
@@ -173,6 +182,7 @@ After structure approval:
    - Examples:
      - With ticket: `2025-01-08-ENG-1478-parent-child-tracking.md`
      - Without ticket: `2025-01-08-improve-error-handling.md`
+
 2. **Use this template structure**:
 
 ````markdown
@@ -267,21 +277,21 @@ After structure approval:
 
 ## References
 
-- Original ticket: `thoughts/shared/tickets/task_XXXX.md`
-- Related research: `thoughts/shared/research/[relevant].md`
+- Original ticket: `path/to/ticket.md`
+- Related research: `path/to/research.md`
 - Similar implementation: `[file:line]`
 ````
 
 ### Step 5: Sync and Review
 
-1. **Sync the thoughts directory**:
+1. **Sync the plan (if HAS_THOUGHTS=true)**:
    - Sync the thoughts directory if using a sync tool
    - This ensures the plan is properly indexed and available
 
 2. **Present the draft plan location**:
    ```
    I've created the initial implementation plan at:
-   `thoughts/shared/plans/YYYY-MM-DD-ENG-XXXX-description.md`
+   `[output path]`
 
    Please review it and let me know:
    - Are the phases properly scoped?
@@ -295,7 +305,7 @@ After structure approval:
    - Adjust technical approach
    - Clarify success criteria (both automated and manual)
    - Add/remove scope items
-   - Sync after making changes if using a sync tool
+   - Sync after making changes if HAS_THOUGHTS=true
 
 4. **Continue refining** until the user is satisfied
 
@@ -433,7 +443,7 @@ tasks = [
 User: /create_plan
 Assistant: I'll help you create a detailed implementation plan...
 
-User: We need to add parent-child tracking for sub-tasks. See thoughts/shared/tickets/task_1478.md
+User: We need to add parent-child tracking for sub-tasks. See path/to/ticket.md
 Assistant: Let me read that ticket file completely first...
 
 [Reads file fully]

@@ -7,12 +7,19 @@ model: opus
 
 You are tasked with updating existing implementation plans based on user feedback. You should be skeptical, thorough, and ensure changes are grounded in actual codebase reality.
 
+## Initial Setup
+
+**First, detect if this repo uses a thoughts/ directory:**
+- Check if `thoughts/` directory exists in the repo root
+- Set `HAS_THOUGHTS=true` if it exists, `HAS_THOUGHTS=false` otherwise
+- This determines whether to use thoughts-related agents and sync behavior
+
 ## Initial Response
 
 When this command is invoked:
 
 1. **Parse the input to identify**:
-   - Plan file path (e.g., `thoughts/shared/plans/2025-10-16-feature.md`)
+   - Plan file path (e.g., `thoughts/shared/plans/2025-10-16-feature.md` or `/tmp/repo/plans/...`)
    - Requested changes/feedback
 
 2. **Handle different input scenarios**:
@@ -21,9 +28,9 @@ When this command is invoked:
    ```
    I'll help you iterate on an existing implementation plan.
 
-   Which plan would you like to update? Please provide the path to the plan file (e.g., `thoughts/shared/plans/2025-10-16-feature.md`).
+   Which plan would you like to update? Please provide the path to the plan file.
 
-   Tip: You can list recent plans with `ls -lt thoughts/shared/plans/ | head`
+   Tip: You can list recent plans with `ls -lt thoughts/shared/plans/ | head` (or check /tmp/{repo}/plans/ for non-thoughts repos)
    ```
    Wait for user input, then re-check for feedback.
 
@@ -73,7 +80,7 @@ If the user's feedback requires understanding new code patterns or validating as
    - **codebase-analyzer** - To understand implementation details
    - **codebase-pattern-finder** - To find similar patterns
 
-   **For historical context:**
+   **For historical context (ONLY if HAS_THOUGHTS=true):**
    - **thoughts-locator** - To find related research or decisions
    - **thoughts-analyzer** - To extract insights from documents
 
@@ -132,13 +139,13 @@ Get user confirmation before proceeding.
 
 ### Step 5: Sync and Review
 
-1. **Sync the updated plan**:
+1. **Sync the updated plan (if HAS_THOUGHTS=true)**:
    - Sync the thoughts directory if using a sync tool
    - This ensures changes are properly indexed
 
 2. **Present the changes made**:
    ```
-   I've updated the plan at `thoughts/shared/plans/[filename].md`
+   I've updated the plan at `[path]`
 
    Changes made:
    - [Specific change 1]

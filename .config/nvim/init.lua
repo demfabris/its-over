@@ -290,6 +290,11 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
+
+      -- VSCode-style keybindings (the good shit)
+      vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Quick Open (files)' })
+      vim.keymap.set('n', '<C-S-p>', builtin.commands, { desc = 'Command Palette' })
+
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })

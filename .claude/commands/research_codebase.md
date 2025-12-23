@@ -1,5 +1,5 @@
 ---
-description: Document codebase as-is with thoughts directory for historical context
+description: Research codebase comprehensively using parallel sub-agents
 model: opus
 ---
 
@@ -16,7 +16,12 @@ You are tasked with conducting comprehensive research across the codebase to ans
 - ONLY describe what exists, where it exists, how it works, and how components interact
 - You are creating a technical map/documentation of the existing system
 
-## Initial Setup:
+## Initial Setup
+
+**First, detect if this repo uses a thoughts/ directory:**
+- Check if `thoughts/` directory exists in the repo root
+- Set `HAS_THOUGHTS=true` if it exists, `HAS_THOUGHTS=false` otherwise
+- This determines whether to use thoughts-related agents and output paths
 
 When this command is invoked, respond with:
 ```
@@ -51,7 +56,7 @@ Then wait for the user's research query.
 
    **IMPORTANT**: All agents are documentarians, not critics. They will describe what exists without suggesting improvements or identifying issues.
 
-   **For thoughts directory:**
+   **For thoughts directory (ONLY if HAS_THOUGHTS=true):**
    - Use the **thoughts-locator** agent to discover what documents exist about the topic
    - Use the **thoughts-analyzer** agent to extract key insights from specific documents (only the most relevant ones)
 
@@ -69,33 +74,35 @@ Then wait for the user's research query.
 
 4. **Wait for all sub-agents to complete and synthesize findings:**
    - IMPORTANT: Wait for ALL sub-agent tasks to complete before proceeding
-   - Compile all sub-agent results (both codebase and thoughts findings)
+   - Compile all sub-agent results (both codebase and thoughts findings if applicable)
    - Prioritize live codebase findings as primary source of truth
-   - Use thoughts/ findings as supplementary historical context
+   - If HAS_THOUGHTS=true, use thoughts/ findings as supplementary historical context
    - Connect findings across different components
    - Include specific file paths and line numbers for reference
-   - Verify all thoughts/ paths are correct (preserve the exact directory structure)
+   - If HAS_THOUGHTS=true, verify all thoughts/ paths are correct (preserve the exact directory structure)
    - Highlight patterns, connections, and architectural decisions
    - Answer the user's specific questions with concrete evidence
 
 5. **Gather metadata for the research document:**
-   - Run the `hack/spec_metadata.sh` script to generate all relevant metadata
-   - Filename: `thoughts/shared/research/YYYY-MM-DD-ENG-XXXX-description.md`
-     - Format: `YYYY-MM-DD-ENG-XXXX-description.md` where:
-       - YYYY-MM-DD is today's date
-       - ENG-XXXX is the ticket number (omit if no ticket)
-       - description is a brief kebab-case description of the research topic
-     - Examples:
-       - With ticket: `2025-01-08-ENG-1478-parent-child-tracking.md`
-       - Without ticket: `2025-01-08-authentication-flow.md`
+   - Run Bash tools to generate all relevant metadata
+   - **Output path depends on HAS_THOUGHTS:**
+     - If HAS_THOUGHTS=true: `thoughts/shared/research/YYYY-MM-DD-ENG-XXXX-description.md`
+     - If HAS_THOUGHTS=false: `/tmp/{repo_name}/research/YYYY-MM-DD-description.md`
+   - Format: `YYYY-MM-DD-ENG-XXXX-description.md` where:
+     - YYYY-MM-DD is today's date
+     - ENG-XXXX is the ticket number (omit if no ticket)
+     - description is a brief kebab-case description of the research topic
+   - Examples:
+     - With ticket: `2025-01-08-ENG-1478-parent-child-tracking.md`
+     - Without ticket: `2025-01-08-authentication-flow.md`
 
 6. **Generate research document:**
-   - Use the metadata gathered in step 4
+   - Use the metadata gathered in step 5
    - Structure the document with YAML frontmatter followed by content:
      ```markdown
      ---
      date: [Current date and time with timezone in ISO format]
-     researcher: [Researcher name from thoughts status]
+     researcher: [Researcher name from metadata]
      git_commit: [Current commit hash]
      branch: [Current branch name]
      repository: [Repository name]
@@ -108,10 +115,10 @@ Then wait for the user's research query.
 
      # Research: [User's Question/Topic]
 
-     **Date**: [Current date and time with timezone from step 4]
-     **Researcher**: [Researcher name from thoughts status]
-     **Git Commit**: [Current commit hash from step 4]
-     **Branch**: [Current branch name from step 4]
+     **Date**: [Current date and time with timezone from step 5]
+     **Researcher**: [Researcher name from metadata]
+     **Git Commit**: [Current commit hash from step 5]
+     **Branch**: [Current branch name from step 5]
      **Repository**: [Repository name]
 
      ## Research Question
@@ -137,14 +144,14 @@ Then wait for the user's research query.
      ## Architecture Documentation
      [Current patterns, conventions, and design implementations found in the codebase]
 
-     ## Historical Context (from thoughts/)
+     ## Historical Context (from thoughts/) [ONLY INCLUDE IF HAS_THOUGHTS=true]
      [Relevant insights from thoughts/ directory with references]
      - `thoughts/shared/something.md` - Historical decision about X
      - `thoughts/local/notes.md` - Past exploration of Y
      Note: Paths exclude "searchable/" even if found there
 
      ## Related Research
-     [Links to other research documents in thoughts/shared/research/]
+     [Links to other research documents]
 
      ## Open Questions
      [Any areas that need further investigation]
@@ -158,7 +165,7 @@ Then wait for the user's research query.
    - Replace local file references with permalinks in the document
 
 8. **Sync and present findings:**
-   - Sync the thoughts directory if using a sync tool
+   - If HAS_THOUGHTS=true, sync the thoughts directory if using a sync tool
    - Present a concise summary of findings to the user
    - Include key file references for easy navigation
    - Ask if they have follow-up questions or need clarification
@@ -169,12 +176,12 @@ Then wait for the user's research query.
    - Add `last_updated_note: "Added follow-up research for [brief description]"` to frontmatter
    - Add a new section: `## Follow-up Research [timestamp]`
    - Spawn new sub-agents as needed for additional investigation
-   - Continue updating the document and syncing
+   - Continue updating the document and syncing (if HAS_THOUGHTS=true)
 
 ## Important notes:
 - Always use parallel Task agents to maximize efficiency and minimize context usage
 - Always run fresh codebase research - never rely solely on existing research documents
-- The thoughts/ directory provides historical context to supplement live findings
+- If HAS_THOUGHTS=true, the thoughts/ directory provides historical context to supplement live findings
 - Focus on finding concrete file paths and line numbers for developer reference
 - Research documents should be self-contained with all necessary context
 - Each sub-agent prompt should be specific and focused on read-only documentation operations
@@ -183,7 +190,7 @@ Then wait for the user's research query.
 - Link to GitHub when possible for permanent references
 - Keep the main agent focused on synthesis, not deep file reading
 - Have sub-agents document examples and usage patterns as they exist
-- Explore all of thoughts/ directory, not just research subdirectory
+- If HAS_THOUGHTS=true, explore all of thoughts/ directory, not just research subdirectory
 - **CRITICAL**: You and all sub-agents are documentarians, not evaluators
 - **REMEMBER**: Document what IS, not what SHOULD BE
 - **NO RECOMMENDATIONS**: Only describe the current state of the codebase
@@ -193,7 +200,7 @@ Then wait for the user's research query.
   - ALWAYS wait for all sub-agents to complete before synthesizing (step 4)
   - ALWAYS gather metadata before writing the document (step 5 before step 6)
   - NEVER write the research document with placeholder values
-- **Path handling**: The thoughts/searchable/ directory contains hard links for searching
+- **Path handling (if HAS_THOUGHTS=true)**: The thoughts/searchable/ directory contains hard links for searching
   - Always document paths by removing ONLY "searchable/" - preserve all other subdirectories
   - Examples of correct transformations:
     - `thoughts/searchable/personal/old_stuff/notes.md` → `thoughts/personal/old_stuff/notes.md`
