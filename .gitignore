@@ -36,6 +36,8 @@
 !.claude/hooks/**
 !.claude/scripts/
 !.claude/scripts/**
+!.claude/agents/
+!.claude/agents/**
 
 # MCP Server config (uses env vars for secrets)
 !.mcp.json
