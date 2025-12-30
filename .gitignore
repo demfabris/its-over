@@ -1,7 +1,6 @@
 # Ignore everything by default
 *
 
-
 # But not this file
 !.gitignore
 
@@ -42,6 +41,8 @@
 .claude/skills/dist/
 !.claude/hooks/
 !.claude/hooks/**
+# Exclude hook logs
+.claude/hooks/*.log
 !.claude/scripts/
 !.claude/scripts/**
 !.claude/agents/
@@ -51,6 +52,35 @@
 !.mcp.json
 
 # ─────────────────────────────────────────────
+# Codex CLI (config only, NO auth/secrets)
+# ─────────────────────────────────────────────
+!.codex/
+!.codex/AGENTS.md
+!.codex/config.toml
+!.codex/rules/
+!.codex/rules/**
+# Exclude system-installed stuff (cloned repos/boilerplate)
+.codex/skills/
+.codex/superpowers/
+# Exclude sensitive/runtime data
+.codex/auth.json
+.codex/history.jsonl
+.codex/sessions/
+.codex/log/
+.codex/version.json
+
+# ─────────────────────────────────────────────
+# Claude-mem (settings only, NO database)
+# ─────────────────────────────────────────────
+!.claude-mem/
+!.claude-mem/settings.json
+# Exclude runtime data
+.claude-mem/*.db*
+.claude-mem/logs/
+.claude-mem/vector-db/
+.claude-mem/*.pid
+
+# ─────────────────────────────────────────────
 # .config/ tools
 # ─────────────────────────────────────────────
 !.config/
@@ -58,6 +88,8 @@
 # Neovim
 !.config/nvim/
 !.config/nvim/**
+# Exclude lazy.nvim lock file (auto-generated)
+.config/nvim/lazy-lock.json
 
 # Terminal
 !.config/ghostty/
@@ -85,9 +117,10 @@
 !.config/gh/
 !.config/gh/config.yml
 
+# Git (global ignore patterns)
+!.config/git/
+!.config/git/ignore
+
 # Other
 !.config/blink/
 !.config/blink/**
-
-lazy-lock.json
-*.log
