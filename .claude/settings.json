@@ -107,5 +107,6 @@
     "explanatory-output-style@claude-plugins-official": true,
     "beads@beads-marketplace": true
   },
-  "syntaxHighlightingDisabled": false
+  "syntaxHighlightingDisabled": false,
+  "model": "opus"
 }

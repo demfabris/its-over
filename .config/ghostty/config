@@ -57,3 +57,5 @@ shell-integration-features = cursor,sudo,title
 # macOS specifics (for tmux meta keys)
 macos-option-as-alt = true
 keybind = shift+enter=text:\x1b\r
+
+# custom-shader = ~/.config/ghostty/shaders/crt.glsl

@@ -16,8 +16,8 @@
 # Tmux
 # ─────────────────────────────────────────────
 !.tmux.conf
-!.tmux/
-!.tmux/**
+!.tmux/themes/
+!.tmux/themes/**
 
 # ─────────────────────────────────────────────
 # Gemini CLI (only config, NO auth/secrets)
@@ -121,6 +121,3 @@
 !.config/git/
 !.config/git/ignore
 
-# Other
-!.config/blink/
-!.config/blink/**

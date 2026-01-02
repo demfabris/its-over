@@ -526,4 +526,17 @@ return {
       },
     },
   },
+
+  -- URL handler - highlight and open URLs, GitHub issues, npm packages, etc.
+  {
+    'chrishrb/gx.nvim',
+    keys = { { 'gx', '<cmd>Browse<cr>', mode = { 'n', 'x' }, desc = 'Open URL under cursor' } },
+    cmd = { 'Browse' },
+    init = function()
+      vim.g.netrw_nogx = 1 -- disable netrw's gx
+    end,
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = true, -- default config
+    submodules = false, -- not needed, saves a small amount of time
+  },
 }
