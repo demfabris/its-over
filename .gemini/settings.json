@@ -5,12 +5,30 @@
   "security": {
     "auth": {
       "selectedType": "oauth-personal"
+    },
+    "enablePermanentToolApproval": true,
+    "folderTrust": {
+      "enabled": true
     }
   },
   "general": {
     "previewFeatures": true
   },
   "ui": {
-    "theme": "Ayu"
+    "theme": "Ayu",
+    "showMemoryUsage": true
+  },
+  "tools": {
+    "autoAccept": false
+  },
+  "experimental": {
+    "introspectionAgentSettings": {
+      "enabled": true
+    }
+  },
+  "context": {
+    "fileFiltering": {
+      "respectGitIgnore": false
+    }
   }
 }
