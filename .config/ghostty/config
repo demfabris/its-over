@@ -63,6 +63,8 @@ macos-option-as-alt = true
 keybind = shift+enter=text:\x1b\r
 
 custom-shader = ~/.config/ghostty/shaders/glow-rgbsplit-twitchy.glsl
+# custom-shader = ~/.config/ghostty/shaders/mnoise.glsl
+# custom-shader = ~/.config/ghostty/shaders/gears-and-belts.glsl
 
 # Terminal bell/notifications (Claude Code sends BEL when done)
 bell-features = system

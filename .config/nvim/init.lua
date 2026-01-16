@@ -675,6 +675,7 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
         automatic_installation = false,
+        automatic_enable = false, -- Don't auto-enable LSP servers (stylua doesn't support --lsp anymore)
         handlers = {
           function(server_name)
             local server = servers[server_name]
@@ -877,6 +878,12 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
+
+      -- Smart buffer deletion (keeps window layout intact)
+      require('mini.bufremove').setup()
+      vim.keymap.set('n', '<leader>x', function()
+        MiniBufremove.delete()
+      end, { desc = 'Close buffer (smart)' })
 
       -- Statusline
       local statusline = require 'mini.statusline'

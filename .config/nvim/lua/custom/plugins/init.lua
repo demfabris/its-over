@@ -169,22 +169,30 @@ return {
       -- Resizing (Alt + hjkl) - simpler: h/l = width, j/k = height
       {
         '<A-h>',
-        function() vim.cmd('vertical resize -3') end,
+        function()
+          vim.cmd 'vertical resize -3'
+        end,
         desc = 'Shrink width',
       },
       {
         '<A-l>',
-        function() vim.cmd('vertical resize +3') end,
+        function()
+          vim.cmd 'vertical resize +3'
+        end,
         desc = 'Grow width',
       },
       {
         '<A-j>',
-        function() vim.cmd('resize -3') end,
+        function()
+          vim.cmd 'resize -3'
+        end,
         desc = 'Shrink height',
       },
       {
         '<A-k>',
-        function() vim.cmd('resize +3') end,
+        function()
+          vim.cmd 'resize +3'
+        end,
         desc = 'Grow height',
       },
       -- Swapping buffers between splits
@@ -297,7 +305,6 @@ return {
   {
     'mrcjkb/rustaceanvim',
     version = '^5',
-    lazy = false,
     ft = { 'rust' },
     init = function()
       vim.g.rustaceanvim = {
@@ -367,10 +374,12 @@ return {
                 },
                 targetDir = 'target/ra', -- Isolate from cargo build
               },
+              diagnostics = {
+                enable = true,
+              },
               checkOnSave = true,
               check = {
                 command = 'clippy',
-                extraArgs = { '--target-dir=target/ra-check' },
               },
               procMacro = {
                 enable = true,
